@@ -6,6 +6,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BotMain extends TelegramLongPollingBot {
 
     public static void main(String[] args) {
@@ -18,7 +23,7 @@ public class BotMain extends TelegramLongPollingBot {
         }
     }
 
-    public void sendMsg(Message message, String text){
+    public void sendMsg(Message message, String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId().toString());
@@ -26,7 +31,7 @@ public class BotMain extends TelegramLongPollingBot {
 
         try {
             sendApiMethod(sendMessage);
-        } catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
@@ -34,22 +39,38 @@ public class BotMain extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message != null && message.hasText()){
-            switch (message.getText()){
+        if (message != null && message.hasText()) {
+            switch (message.getText()) {
                 case "/help" -> sendMsg(message, "Бот в разработке");
-                default -> sendMsg(message,"Я живой! Я работаю!");
+                default -> sendMsg(message, "Я живой! Я работаю!");
             }
         }
     }
 
     @Override
     public String getBotUsername() {
-        return "Железяка Бот";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/bot.config"));
+            List<String> linesList = reader.lines().collect(Collectors.toList());
+            reader.close();
+            return linesList.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public String getBotToken() {
-        return "1781611223:AAFbn1hxZHOGgaqc_7Fh62xEZQBk9aDYMww";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/bot.config"));
+            List<String> linesList = reader.lines().collect(Collectors.toList());
+            reader.close();
+            return linesList.get(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
