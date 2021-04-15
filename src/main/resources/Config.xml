@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <telegram>
+        <bot>
+            <name>Железяка Бот</name>
+            <token>1781611223:AAFbn1hxZHOGgaqc_7Fh62xEZQBk9aDYMww</token>
+        </bot>
+    </telegram>
+</config>
